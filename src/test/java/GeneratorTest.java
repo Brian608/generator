@@ -22,14 +22,15 @@ public class GeneratorTest {
     @Autowired
     private IUserAddressService userAddressService;
 
+
+    @Test
+    public void  findAll(){
+        List<UserAddress> userAddressList = userAddressService.list();
+        userAddressList.forEach(System.out::println);
+    }
     @Test
     public  void generatorTest(){
         CodeGenerator codeGenerator=new CodeGenerator();
-        codeGenerator.generateByTables(true,"user_address");
-    }
-    @Test
-    public void  findAll(){
-        List<UserAddress> userAddressList = userAddressService.findAll();
-        userAddressList.forEach(System.out::println);
+        codeGenerator.generator("user_address");
     }
 }

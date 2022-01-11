@@ -1,6 +1,7 @@
 package org.feather.config;
 
 import com.baomidou.mybatisplus.annotation.DbType;
+import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.generator.AutoGenerator;
 import com.baomidou.mybatisplus.generator.config.DataSourceConfig;
 import com.baomidou.mybatisplus.generator.config.GlobalConfig;
@@ -20,43 +21,78 @@ public class CodeGenerator {
     public static final String PASSWORD = "root";
     public static final String DRIVER = "com.mysql.jdbc.Driver";
     public static final String AUTHOR = "feather(杜雪松)";
-    //生成的文件输出到哪个目录
-    public static final String OUTPUT_FILE = System.getProperty("user.dir")+"/src/main/java";
-    //包名，会按照com/example/demo这种形式生成类
     public static final String PACKAGE = "org.feather";
     //TODO 更多配置请参考http://mp.baomidou.com/#/generate-code
 
-    public void generateByTables(boolean serviceNameStartWithI, String... tableNames) {
-        GlobalConfig config = new GlobalConfig();
-        DataSourceConfig dataSourceConfig = new DataSourceConfig();
-        dataSourceConfig.setDbType(DbType.MYSQL)
-                .setUrl(DB_URL)
-                .setUsername(USER_NAME)
-                .setPassword(PASSWORD)
-                .setDriverName(DRIVER);
-        StrategyConfig strategyConfig = new StrategyConfig();
-        strategyConfig
-                .setCapitalMode(true)
-                .setEntityLombokModel(false)
-               // .setDbColumnUnderline(true)
-                .setNaming(NamingStrategy.underline_to_camel)
-                .setInclude(tableNames);//修改替换成你需要的表名，多个表名传数组
-        config.setActiveRecord(false)
-                .setAuthor(AUTHOR)
-                .setOutputDir(OUTPUT_FILE)
-                .setFileOverride(true);
-        if (!serviceNameStartWithI) {
-            config.setServiceName("%sService");
-        }
-        new AutoGenerator().setGlobalConfig(config)
-                .setDataSource(dataSourceConfig)
-                .setStrategy(strategyConfig)
-                .setPackageInfo(
-                        new PackageConfig()
-                                .setParent(PACKAGE)
-                                .setController("controller")
-                                .setEntity("entity")
-                ).execute();
-    }
 
-}
+        public    void generator(String tableName){
+
+            // 代码生成器
+            AutoGenerator mpg = new AutoGenerator();
+
+            // 1.全局配置
+            GlobalConfig gc = new GlobalConfig();
+            gc.setActiveRecord(true);//支持AR模式
+            String projectPath = System.getProperty("user.dir");
+            gc.setOutputDir(projectPath+"/src/main/java");
+            gc.setFileOverride(true);//文件覆盖
+            gc.setIdType(IdType.AUTO);//主键自增
+            // gc.setServiceName("%sService");//设置接口名称是否有I
+            gc.setAuthor(AUTHOR);
+            gc.setBaseResultMap(true);//xml映射
+            gc.setBaseColumnList(true);//sql片段
+            mpg.setGlobalConfig(gc);
+
+            // 2.数据源配置
+            DataSourceConfig dsc = new DataSourceConfig();
+            dsc.setUrl(DB_URL);
+            dsc.setDbType(DbType.MYSQL);
+            dsc.setDriverName(DRIVER);
+            dsc.setUsername(USER_NAME);
+            dsc.setPassword(PASSWORD);
+            mpg.setDataSource(dsc);
+
+            // 策略配置
+            StrategyConfig strategy = new StrategyConfig();
+
+            //设置字段和表名的是否把下划线完成驼峰命名规则
+            strategy.setNaming(NamingStrategy.underline_to_camel);
+
+            strategy.setColumnNaming(NamingStrategy.underline_to_camel);
+
+            //是否启动lombok
+            strategy.setEntityLombokModel(true);
+
+            //是否生成resetController
+            strategy.setRestControllerStyle(true);
+
+
+            //要设置生成哪些表 如果不设置就是生成所有的表
+            strategy.setInclude(tableName.split(","));
+
+            strategy.setControllerMappingHyphenStyle(true);
+
+            //strategy.setTablePrefix(pc.getModuleName() + "_");
+            // strategy.setTablePrefix("sys_");
+
+            mpg.setStrategy(strategy);
+
+
+            // 4.包配置
+            PackageConfig pc = new PackageConfig();
+            pc.setParent(PACKAGE);
+            pc.setMapper("mapper");
+            pc.setService("service");
+            pc.setController("controller");
+            pc.setEntity("entity");
+            pc.setXml("mapper");
+            mpg.setPackageInfo(pc);
+            // 5.执行
+            mpg.execute();
+
+
+        }
+
+
+
+    }
