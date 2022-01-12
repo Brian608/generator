@@ -1,5 +1,4 @@
 import org.feather.GeneratorApplication;
-import org.feather.config.CodeGenerator;
 import org.feather.entity.CouponTemplate;
 import org.feather.entity.UserAddress;
 import org.feather.service.ICouponTemplateService;
@@ -16,21 +15,25 @@ import java.util.List;
  * @program: generator
  * @description:
  * @author: 杜雪松(feather)
- * @since: 2022-01-10 23:11
+ * @since: 2022-01-12 21:05
  **/
 @SpringBootTest(classes = GeneratorApplication.class)
 @RunWith(SpringRunner.class)
-public class GeneratorTest {
+public class ServiceTest {
+    @Autowired
+    private IUserAddressService userAddressService;
 
     @Autowired
-    CodeGenerator codeGenerator;
-
-
-
+    private ICouponTemplateService couponTemplateService;
 
     @Test
-    public  void generatorTest(){
-        codeGenerator.generator("coupon_template");
+    public void  findAll(){
+        List<UserAddress> userAddressList = userAddressService.list();
+        userAddressList.forEach(System.out::println);
     }
-
+    @Test
+    public  void listAllCouponTemplate(){
+        List<CouponTemplate> couponTemplateList = couponTemplateService.list();
+        couponTemplateList.forEach(System.out::println);
+    }
 }

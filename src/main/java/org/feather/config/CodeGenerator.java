@@ -8,6 +8,9 @@ import com.baomidou.mybatisplus.generator.config.GlobalConfig;
 import com.baomidou.mybatisplus.generator.config.PackageConfig;
 import com.baomidou.mybatisplus.generator.config.StrategyConfig;
 import com.baomidou.mybatisplus.generator.config.rules.NamingStrategy;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 
 /**
  * @program: mybatis-plus-generator
@@ -15,11 +18,25 @@ import com.baomidou.mybatisplus.generator.config.rules.NamingStrategy;
  * @author: 杜雪松(feather)
  * @since: 2022-01-10 21:56
  **/
+@Slf4j
+@Component
 public class CodeGenerator {
-    public static final String DB_URL = "jdbc:mysql://localhost:3306/foodie-shop-dev?useUnicode=true&characterEncoding=utf8&allowMultiQueries=true";
-    public static final String USER_NAME = "root";
-    public static final String PASSWORD = "root";
-    public static final String DRIVER = "com.mysql.jdbc.Driver";
+//    @Value("${spring.datasource.url}")
+//    private String url;
+//
+//    @Value("${spring.datasource.username}")
+//    private String username;
+//
+//    @Value("${spring.datasource.driver-class-name}")
+//    private String driver;
+//
+//    @Value("${spring.datasource.password}")
+//    private String password;
+
+    public static final String url = "jdbc:mysql://localhost:3306/imooc_coupon_data?useUnicode=true&characterEncoding=utf8&allowMultiQueries=true";
+    public static final String username = "root";
+    public static final String password = "root";
+    public static final String driver = "com.mysql.jdbc.Driver";
     public static final String AUTHOR = "feather(杜雪松)";
     public static final String PACKAGE = "org.feather";
     //TODO 更多配置请参考http://mp.baomidou.com/#/generate-code
@@ -45,11 +62,11 @@ public class CodeGenerator {
 
             // 2.数据源配置
             DataSourceConfig dsc = new DataSourceConfig();
-            dsc.setUrl(DB_URL);
+            dsc.setUrl(url);
             dsc.setDbType(DbType.MYSQL);
-            dsc.setDriverName(DRIVER);
-            dsc.setUsername(USER_NAME);
-            dsc.setPassword(PASSWORD);
+            dsc.setDriverName(driver);
+            dsc.setUsername(username);
+            dsc.setPassword(password);
             mpg.setDataSource(dsc);
 
             // 策略配置
